@@ -413,28 +413,25 @@ with tabs[2]:
     trades_manage = trades.copy()
     trades_manage.insert(0, "delete", False)
 
+    # 重要：為避免 Streamlit Cloud 不同版本造成欄位型態衝突，
+    # 這裡不指定 column_config，改用最穩定的原生 data_editor。
+    # 同時先把欄位轉成固定型態，避免 StreamlitAPIException。
+    for col in ["date", "symbol", "name", "market", "currency", "action", "note"]:
+        if col in trades_manage.columns:
+            trades_manage[col] = trades_manage[col].astype(str)
+
+    for col in ["qty", "price", "buy_fee", "sell_fee", "tax", "gross_realized", "net_realized"]:
+        if col in trades_manage.columns:
+            trades_manage[col] = pd.to_numeric(trades_manage[col], errors="coerce").fillna(0.0)
+
+    if "delete" in trades_manage.columns:
+        trades_manage["delete"] = trades_manage["delete"].fillna(False).astype(bool)
+
     edited_trades = st.data_editor(
         trades_manage,
         use_container_width=True,
         hide_index=True,
-        num_rows="dynamic",
-        column_config={
-            "delete": st.column_config.CheckboxColumn("刪除"),
-            "date": st.column_config.TextColumn("日期"),
-            "symbol": st.column_config.TextColumn("股票代碼"),
-            "name": st.column_config.TextColumn("名稱"),
-            "market": st.column_config.SelectboxColumn("市場", options=["TW","US"]),
-            "currency": st.column_config.SelectboxColumn("幣別", options=["TWD","USD"]),
-            "action": st.column_config.SelectboxColumn("動作", options=["買進","賣出"]),
-            "qty": st.column_config.NumberColumn("股數"),
-            "price": st.column_config.NumberColumn("成交價"),
-            "buy_fee": st.column_config.NumberColumn("買進手續費"),
-            "sell_fee": st.column_config.NumberColumn("賣出手續費"),
-            "tax": st.column_config.NumberColumn("證交稅/交易稅"),
-            "gross_realized": st.column_config.NumberColumn("已實現毛損益"),
-            "net_realized": st.column_config.NumberColumn("已實現淨損益"),
-            "note": st.column_config.TextColumn("備註"),
-        }
+        num_rows="dynamic"
     )
 
     col_a, col_b = st.columns(2)
@@ -444,6 +441,11 @@ with tabs[2]:
             if "delete" in new_trades.columns:
                 new_trades = new_trades[new_trades["delete"] == False].drop(columns=["delete"])
             new_trades = normalize_trades(new_trades)
+
+            for col in ["qty", "price", "buy_fee", "sell_fee", "tax", "gross_realized", "net_realized"]:
+                new_trades[col] = pd.to_numeric(new_trades[col], errors="coerce").fillna(0.0)
+            for col in ["date", "symbol", "name", "market", "currency", "action", "note"]:
+                new_trades[col] = new_trades[col].astype(str)
 
             # 重新計算賣出交易的 gross/net
             _, new_trades = rebuild_holdings_from_trades(holdings, new_trades)
