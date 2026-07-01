@@ -56,13 +56,57 @@ settings = load_settings()
 
 with st.sidebar:
     st.header("設定")
-    theme_choice = st.selectbox("主題配色", ["淡粉色", "海龜沙灘版"], index=0 if settings.get("theme")=="淡粉色" else 1)
+    theme_choice = st.selectbox("主題配色", ["淡粉色", "海龜沙灘版", "海龜海洋版", "海龜森林版"], index=["淡粉色", "海龜沙灘版", "海龜海洋版", "海龜森林版"].index(settings.get("theme","海龜沙灘版")) if settings.get("theme","海龜沙灘版") in ["淡粉色", "海龜沙灘版", "海龜海洋版", "海龜森林版"] else 1)
     if theme_choice != settings.get("theme"):
         settings["theme"] = theme_choice
         save_settings(settings)
         st.rerun()
 
-if settings.get("theme") == "海龜沙灘版":
+theme = settings.get("theme", "海龜沙灘版")
+
+if theme == "海龜森林版":
+    css = """
+    <style>
+    .stApp{background:#EEF5EE;}
+    .block-container{padding-top:1rem;padding-bottom:4rem;}
+    [data-testid="stMetric"]{background:#F9FCF7;border:1px solid #BFD8BF;border-radius:20px;padding:16px;box-shadow:0 4px 14px rgba(60,100,60,.08);}
+    h1,h2,h3{color:#355C3A;}
+    p,label,span{color:#3A4D3A;}
+    section[data-testid="stSidebar"]{background:#E3EFE3;}
+    .stTabs [data-baseweb="tab"]{background:#F9FCF7;border-radius:999px;border:1px solid #BFD8BF;color:#355C3A;}
+    .stTabs [aria-selected="true"]{background:#D7E8D7!important;color:#2E4F33!important;}
+    .stButton>button,.stDownloadButton>button{background:#5B7F5A;color:white;border:none;border-radius:15px;font-weight:700;}
+    .stButton>button:hover,.stDownloadButton>button:hover{background:#466B46;color:white;}
+    div[data-testid="stDataFrame"]{background:#F9FCF7;border-radius:16px;}
+    .calendar-card{background:#F9FCF7;border:1px solid #BFD8BF;border-radius:16px;padding:10px;min-height:90px;margin:2px;}
+    .calendar-empty{background:#E8F1E8;border:1px dashed #BFD8BF;border-radius:16px;padding:10px;min-height:90px;margin:2px;color:#7A947A;}
+    .gain{color:#287C4F;font-weight:700;}
+    .loss{color:#B85C5C;font-weight:700;}
+    .flat{color:#777;font-weight:700;}
+    </style>
+    """
+elif theme == "海龜海洋版":
+    css = """
+    <style>
+    .stApp{background:#EAF5F5;}
+    .block-container{padding-top:1rem;padding-bottom:4rem;}
+    [data-testid="stMetric"]{background:#FDFEFE;border:1px solid #B8D8D8;border-radius:20px;padding:16px;box-shadow:0 4px 14px rgba(70,120,125,.08);}
+    h1,h2,h3{color:#2F5D62;}
+    p,label,span{color:#355C60;}
+    section[data-testid="stSidebar"]{background:#DDEFEF;}
+    .stTabs [data-baseweb="tab"]{background:#FDFEFE;border-radius:999px;border:1px solid #B8D8D8;color:#2F5D62;}
+    .stTabs [aria-selected="true"]{background:#CDE7E7!important;color:#244C50!important;}
+    .stButton>button,.stDownloadButton>button{background:#4F8A8B;color:white;border:none;border-radius:15px;font-weight:700;}
+    .stButton>button:hover,.stDownloadButton>button:hover{background:#3F7677;color:white;}
+    div[data-testid="stDataFrame"]{background:#FDFEFE;border-radius:16px;}
+    .calendar-card{background:#FDFEFE;border:1px solid #B8D8D8;border-radius:16px;padding:10px;min-height:90px;margin:2px;}
+    .calendar-empty{background:#DFF0F0;border:1px dashed #B8D8D8;border-radius:16px;padding:10px;min-height:90px;margin:2px;color:#78999A;}
+    .gain{color:#2F8F70;font-weight:700;}
+    .loss{color:#B85C5C;font-weight:700;}
+    .flat{color:#777;font-weight:700;}
+    </style>
+    """
+elif theme == "海龜沙灘版":
     css = """
     <style>
     .stApp{background:#F8F5ED;}
@@ -76,8 +120,8 @@ if settings.get("theme") == "海龜沙灘版":
     .stButton>button,.stDownloadButton>button{background:#6E8B74;color:white;border:none;border-radius:15px;font-weight:700;}
     .stButton>button:hover,.stDownloadButton>button:hover{background:#5B7F5A;color:white;}
     div[data-testid="stDataFrame"]{background:#FFFDF8;border-radius:16px;}
-    .calendar-card{background:#FFFDF8;border:1px solid #D9D1BC;border-radius:16px;padding:10px;min-height:98px;margin:2px;}
-    .calendar-empty{background:#F2EBDD;border:1px dashed #D9D1BC;border-radius:16px;padding:10px;min-height:98px;margin:2px;color:#9A927E;}
+    .calendar-card{background:#FFFDF8;border:1px solid #D9D1BC;border-radius:16px;padding:10px;min-height:90px;margin:2px;}
+    .calendar-empty{background:#F2EBDD;border:1px dashed #D9D1BC;border-radius:16px;padding:10px;min-height:90px;margin:2px;color:#9A927E;}
     .gain{color:#2F7D4F;font-weight:700;}
     .loss{color:#B85C5C;font-weight:700;}
     .flat{color:#777;font-weight:700;}
@@ -97,14 +141,32 @@ else:
     .stButton>button,.stDownloadButton>button{background:#E7A9B7;color:white;border:none;border-radius:15px;font-weight:700;}
     .stButton>button:hover,.stDownloadButton>button:hover{background:#D98FA0;color:white;}
     div[data-testid="stDataFrame"]{background:#FFFDFE;border-radius:16px;}
-    .calendar-card{background:#FFFDFE;border:1px solid #F3C9D2;border-radius:16px;padding:10px;min-height:98px;margin:2px;}
-    .calendar-empty{background:#FFF0F3;border:1px dashed #F3C9D2;border-radius:16px;padding:10px;min-height:98px;margin:2px;color:#B78A94;}
+    .calendar-card{background:#FFFDFE;border:1px solid #F3C9D2;border-radius:16px;padding:10px;min-height:90px;margin:2px;}
+    .calendar-empty{background:#FFF0F3;border:1px dashed #F3C9D2;border-radius:16px;padding:10px;min-height:90px;margin:2px;color:#B78A94;}
     .gain{color:#2F8F5B;font-weight:700;}
     .loss{color:#C05A6A;font-weight:700;}
     .flat{color:#777;font-weight:700;}
     </style>
     """
 st.markdown(css, unsafe_allow_html=True)
+
+
+CN_MAP = {
+    "symbol":"股票代碼","name":"名稱","market":"市場","currency":"幣別",
+    "shares":"庫存股數","avg_cost":"平均成本","price":"現價",
+    "market_value":"庫存市值","cost_value":"庫存成本","unrealized_profit":"未實現損益",
+    "return_rate":"報酬率%","date":"日期","action":"買賣","qty":"股數",
+    "buy_fee":"買進手續費","sell_fee":"賣出手續費","tax":"證交稅/交易稅",
+    "gross_realized":"已實現毛損益","net_realized":"已實現淨損益","note":"備註",
+    "total_market_value":"總市值","total_cost":"總成本","realized_profit":"已實現損益",
+    "total_profit":"總損益","daily_change":"每日變化","month":"月份","year":"年度",
+    "月初資產":"月初資產","月底資產":"月底資產","月增減":"月增減","月報酬率%":"月報酬率%",
+    "月底未實現":"月底未實現","月底已實現":"月底已實現","月底總損益":"月底總損益","紀錄天數":"紀錄天數",
+    "delete":"刪除"
+}
+
+def zh(df):
+    return df.rename(columns={k:v for k,v in CN_MAP.items() if k in df.columns})
 
 def init_files():
     if not HOLDINGS_FILE.exists():
@@ -342,6 +404,28 @@ def import_backup(uploaded_file):
     if "settings" in data:
         save_settings(data["settings"])
 
+
+def prepare_trade_daily(trades):
+    t = normalize_trades(trades).copy()
+    if t.empty:
+        return pd.DataFrame()
+    t["date_dt"] = pd.to_datetime(t["date"], errors="coerce")
+    t = t.dropna(subset=["date_dt"])
+    if t.empty:
+        return pd.DataFrame()
+    g = t.groupby("date").agg(
+        gross_realized=("gross_realized","sum"),
+        net_realized=("net_realized","sum"),
+        buy_fee=("buy_fee","sum"),
+        sell_fee=("sell_fee","sum"),
+        tax=("tax","sum"),
+        trades_count=("symbol","count")
+    ).reset_index()
+    g["date_dt"] = pd.to_datetime(g["date"], errors="coerce")
+    g["year"] = g["date_dt"].dt.year
+    g["month_num"] = g["date_dt"].dt.month
+    return g.sort_values("date_dt")
+
 def prepare_daily_view(daily):
     d = normalize_daily(daily).copy()
     if d.empty:
@@ -354,15 +438,15 @@ def prepare_daily_view(daily):
     d["month_num"] = d["date_dt"].dt.month
     return d
 
-def render_calendar(daily, year, month):
-    d = prepare_daily_view(daily)
+def render_calendar(trades, year, month):
+    d = prepare_trade_daily(trades)
     data = {}
     if not d.empty:
-        mdf = d[(d["date_dt"].dt.year == year) & (d["date_dt"].dt.month == month)]
+        mdf = d[(d["year"] == year) & (d["month_num"] == month)]
         for _, r in mdf.iterrows():
             data[int(r["date_dt"].day)] = r
 
-    st.subheader(f"{year} 年 {month} 月資產月曆")
+    st.subheader(f"{year} 年 {month} 月價差月曆")
     week_names = ["一", "二", "三", "四", "五", "六", "日"]
     cols = st.columns(7)
     for i, w in enumerate(week_names):
@@ -376,21 +460,21 @@ def render_calendar(daily, year, month):
                 cols[i].markdown('<div class="calendar-empty"></div>', unsafe_allow_html=True)
             elif day in data:
                 r = data[day]
-                chg = float(r.get("daily_change", 0) or 0)
-                cls = "gain" if chg > 0 else "loss" if chg < 0 else "flat"
-                sign = "+" if chg > 0 else ""
+                amount = float(r.get("net_realized", 0) or 0)
+                cls = "gain" if amount > 0 else "loss" if amount < 0 else "flat"
+                sign = "+" if amount > 0 else ""
                 cols[i].markdown(f"""
                     <div class="calendar-card">
                         <b>{day}</b><br>
-                        <span>資產 {money(r["total_market_value"])}</span><br>
-                        <span class="{cls}">{sign}{money(chg)}</span><br>
-                        <small>總損益 {money(r["total_profit"])}</small>
+                        <span>價差</span><br>
+                        <span class="{cls}">{sign}{money(amount)}</span><br>
+                        <small>{int(r.get("trades_count", 0))} 筆交易</small>
                     </div>
                 """, unsafe_allow_html=True)
             else:
                 cols[i].markdown(f"""
                     <div class="calendar-empty">
-                        <b>{day}</b><br><small>無紀錄</small>
+                        <b>{day}</b><br><small>無價差</small>
                     </div>
                 """, unsafe_allow_html=True)
 
@@ -430,7 +514,7 @@ trades = normalize_trades(read_csv(TRADES_FILE, TRADES_COLS))
 daily = normalize_daily(read_csv(DAILY_FILE, DAILY_COLS))
 
 st.title("🐢 價差交易紀錄｜月曆版")
-st.caption("新增資產月曆、每日變化時間軸、每月統計，並可切換淡粉色 / 海龜沙灘版。")
+st.caption("新增價差月曆、每日變化時間軸、每月統計，並可切換淡粉色 / 海龜沙灘版 / 海洋版 / 森林版。")
 
 colu1, colu2 = st.columns(2)
 with colu1:
@@ -469,7 +553,7 @@ c2.metric("未實現損益", money(unrealized) + " 元")
 c3.metric("已實現損益", money(realized) + " 元")
 c4.metric("總損益", money(total_profit) + " 元")
 
-tabs = st.tabs(["新增買賣", "庫存", "交易紀錄", "每日資產", "資產月曆", "每月統計", "損益統計", "備份/還原"])
+tabs = st.tabs(["新增買賣", "庫存", "交易紀錄", "每日資產", "價差月曆", "每月統計", "損益統計", "備份/還原"])
 
 with tabs[0]:
     st.subheader("新增買賣交易")
@@ -504,9 +588,10 @@ with tabs[0]:
 with tabs[1]:
     st.subheader("目前庫存")
     show = dfv[["symbol","name","market","currency","shares","avg_cost","price","market_value","cost_value","unrealized_profit","return_rate"]]
-    st.dataframe(show, use_container_width=True, hide_index=True)
+    st.dataframe(zh(show), use_container_width=True, hide_index=True)
     st.subheader("手動修改庫存")
-    edited = st.data_editor(holdings, use_container_width=True, num_rows="dynamic", hide_index=True)
+    edited_display = st.data_editor(zh(holdings), use_container_width=True, num_rows="dynamic", hide_index=True)
+    edited = edited_display.rename(columns={v:k for k,v in CN_MAP.items()})
     if st.button("💾 儲存庫存修改"):
         save_csv(normalize_holdings(edited), HOLDINGS_FILE, HOLDINGS_COLS)
         st.success("已儲存庫存")
@@ -522,7 +607,8 @@ with tabs[2]:
     for col in ["qty", "price", "buy_fee", "sell_fee", "tax", "gross_realized", "net_realized"]:
         trades_manage[col] = pd.to_numeric(trades_manage[col], errors="coerce").fillna(0.0)
     trades_manage["delete"] = trades_manage["delete"].fillna(False).astype(bool)
-    edited_trades = st.data_editor(trades_manage, use_container_width=True, hide_index=True, num_rows="dynamic")
+    edited_trades_display = st.data_editor(zh(trades_manage), use_container_width=True, hide_index=True, num_rows="dynamic")
+    edited_trades = edited_trades_display.rename(columns={v:k for k,v in CN_MAP.items()})
     if st.button("💾 儲存交易修改 / 刪除", use_container_width=True):
         new_trades = edited_trades.copy()
         if "delete" in new_trades.columns:
@@ -540,20 +626,20 @@ with tabs[3]:
         dview = prepare_daily_view(daily)
         daily_show = dview.sort_values("date_dt", ascending=False).copy()
         daily_show["較前次變化"] = daily_show["daily_change"]
-        st.dataframe(daily_show.drop(columns=["date_dt","month","year","month_num"], errors="ignore"), use_container_width=True, hide_index=True)
+        st.dataframe(zh(daily_show.drop(columns=["date_dt","month","year","month_num"], errors="ignore")), use_container_width=True, hide_index=True)
         chart = dview.sort_values("date_dt").set_index("date")
         st.line_chart(chart[["total_market_value","unrealized_profit","realized_profit","total_profit"]])
     else:
         st.info("尚未有每日資產紀錄")
 
 with tabs[4]:
-    dview = prepare_daily_view(daily)
+    tview = prepare_trade_daily(trades)
     today = date.today()
-    years = [today.year] if dview.empty else sorted(dview["year"].dropna().astype(int).unique().tolist(), reverse=True)
+    years = [today.year] if tview.empty else sorted(tview["year"].dropna().astype(int).unique().tolist(), reverse=True)
     col_y, col_m = st.columns(2)
     y = col_y.selectbox("年份", years, index=0)
     m = col_m.selectbox("月份", list(range(1,13)), index=today.month-1)
-    render_calendar(daily, int(y), int(m))
+    render_calendar(trades, int(y), int(m))
 
 with tabs[5]:
     st.subheader("每月統計")
@@ -561,7 +647,7 @@ with tabs[5]:
     if ms.empty:
         st.info("尚未有每日資產紀錄")
     else:
-        st.dataframe(ms, use_container_width=True, hide_index=True)
+        st.dataframe(zh(ms), use_container_width=True, hide_index=True)
         st.bar_chart(ms.sort_values("月份").set_index("月份")["月增減"])
 
 with tabs[6]:
@@ -571,11 +657,11 @@ with tabs[6]:
         t["month"] = pd.to_datetime(t["date"], errors="coerce").dt.to_period("M").astype(str)
         t["year"] = pd.to_datetime(t["date"], errors="coerce").dt.year.astype(str)
         st.write("依股票")
-        st.dataframe(t.groupby("symbol")[["gross_realized","buy_fee","sell_fee","tax","net_realized"]].sum().reset_index(), use_container_width=True, hide_index=True)
+        st.dataframe(zh(t.groupby("symbol")[["gross_realized","buy_fee","sell_fee","tax","net_realized"]].sum().reset_index()), use_container_width=True, hide_index=True)
         st.write("依月份")
-        st.dataframe(t.groupby("month")[["gross_realized","buy_fee","sell_fee","tax","net_realized"]].sum().reset_index(), use_container_width=True, hide_index=True)
+        st.dataframe(zh(t.groupby("month")[["gross_realized","buy_fee","sell_fee","tax","net_realized"]].sum().reset_index()), use_container_width=True, hide_index=True)
         st.write("依年度")
-        st.dataframe(t.groupby("year")[["gross_realized","buy_fee","sell_fee","tax","net_realized"]].sum().reset_index(), use_container_width=True, hide_index=True)
+        st.dataframe(zh(t.groupby("year")[["gross_realized","buy_fee","sell_fee","tax","net_realized"]].sum().reset_index()), use_container_width=True, hide_index=True)
     else:
         st.info("尚未有交易紀錄")
 
