@@ -4,6 +4,7 @@ import pandas as pd
 from pathlib import Path
 from datetime import date
 import json
+import calendar
 
 try:
     import yfinance as yf
@@ -13,6 +14,7 @@ except Exception:
 HOLDINGS_FILE = Path("holdings.csv")
 TRADES_FILE = Path("trades.csv")
 DAILY_FILE = Path("daily_assets.csv")
+SETTINGS_FILE = Path("settings.json")
 
 DEFAULT_HOLDINGS = [
     {"symbol":"00947","name":"台新臺灣IC設計動能ETF","market":"TW","currency":"TWD","shares":1004.0,"avg_cost":25.78,"price":25.78},
@@ -37,60 +39,72 @@ HOLDINGS_COLS = ["symbol","name","market","currency","shares","avg_cost","price"
 TRADES_COLS = ["date","symbol","name","market","currency","action","qty","price","buy_fee","sell_fee","tax","gross_realized","net_realized","note"]
 DAILY_COLS = ["date","total_market_value","total_cost","unrealized_profit","realized_profit","total_profit"]
 
-st.set_page_config(page_title="價差交易紀錄｜手動備份版", page_icon="🌸", layout="wide")
+st.set_page_config(page_title="價差交易紀錄｜月曆版", page_icon="🐢", layout="wide")
 
-st.markdown("""
-<style>
-.stApp{
-    background:#FFF5F7;
-}
-.block-container{
-    padding-top:1rem;
-    padding-bottom:4rem;
-}
-[data-testid="stMetric"]{
-    background:#FFFDFE;
-    border:1px solid #F3C9D2;
-    border-radius:20px;
-    padding:16px;
-    box-shadow:0 4px 14px rgba(177,92,112,.08);
-}
-h1,h2,h3{
-    color:#6B3F4A;
-}
-p,label,span{
-    color:#6B4B52;
-}
-section[data-testid="stSidebar"]{
-    background:#FFECEF;
-}
-.stTabs [data-baseweb="tab"]{
-    background:#FFFDFE;
-    border-radius:999px;
-    border:1px solid #F3C9D2;
-    color:#6B3F4A;
-}
-.stTabs [aria-selected="true"]{
-    background:#F8D7DE!important;
-    color:#5A2F3A!important;
-}
-.stButton>button,.stDownloadButton>button{
-    background:#E7A9B7;
-    color:white;
-    border:none;
-    border-radius:15px;
-    font-weight:700;
-}
-.stButton>button:hover,.stDownloadButton>button:hover{
-    background:#D98FA0;
-    color:white;
-}
-div[data-testid="stDataFrame"]{
-    background:#FFFDFE;
-    border-radius:16px;
-}
-</style>
-""", unsafe_allow_html=True)
+def load_settings():
+    if SETTINGS_FILE.exists():
+        try:
+            return json.loads(SETTINGS_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {"theme":"海龜沙灘版"}
+
+def save_settings(settings):
+    SETTINGS_FILE.write_text(json.dumps(settings, ensure_ascii=False, indent=2), encoding="utf-8")
+
+settings = load_settings()
+
+with st.sidebar:
+    st.header("設定")
+    theme_choice = st.selectbox("主題配色", ["淡粉色", "海龜沙灘版"], index=0 if settings.get("theme")=="淡粉色" else 1)
+    if theme_choice != settings.get("theme"):
+        settings["theme"] = theme_choice
+        save_settings(settings)
+        st.rerun()
+
+if settings.get("theme") == "海龜沙灘版":
+    css = """
+    <style>
+    .stApp{background:#F8F5ED;}
+    .block-container{padding-top:1rem;padding-bottom:4rem;}
+    [data-testid="stMetric"]{background:#FFFDF8;border:1px solid #D9D1BC;border-radius:20px;padding:16px;box-shadow:0 4px 14px rgba(80,90,70,.08);}
+    h1,h2,h3{color:#355C3A;}
+    p,label,span{color:#3D4D40;}
+    section[data-testid="stSidebar"]{background:#EFE8D8;}
+    .stTabs [data-baseweb="tab"]{background:#FFFDF8;border-radius:999px;border:1px solid #D9D1BC;color:#3D4D40;}
+    .stTabs [aria-selected="true"]{background:#DDEAD8!important;color:#355C3A!important;}
+    .stButton>button,.stDownloadButton>button{background:#6E8B74;color:white;border:none;border-radius:15px;font-weight:700;}
+    .stButton>button:hover,.stDownloadButton>button:hover{background:#5B7F5A;color:white;}
+    div[data-testid="stDataFrame"]{background:#FFFDF8;border-radius:16px;}
+    .calendar-card{background:#FFFDF8;border:1px solid #D9D1BC;border-radius:16px;padding:10px;min-height:98px;margin:2px;}
+    .calendar-empty{background:#F2EBDD;border:1px dashed #D9D1BC;border-radius:16px;padding:10px;min-height:98px;margin:2px;color:#9A927E;}
+    .gain{color:#2F7D4F;font-weight:700;}
+    .loss{color:#B85C5C;font-weight:700;}
+    .flat{color:#777;font-weight:700;}
+    </style>
+    """
+else:
+    css = """
+    <style>
+    .stApp{background:#FFF5F7;}
+    .block-container{padding-top:1rem;padding-bottom:4rem;}
+    [data-testid="stMetric"]{background:#FFFDFE;border:1px solid #F3C9D2;border-radius:20px;padding:16px;box-shadow:0 4px 14px rgba(177,92,112,.08);}
+    h1,h2,h3{color:#6B3F4A;}
+    p,label,span{color:#6B4B52;}
+    section[data-testid="stSidebar"]{background:#FFECEF;}
+    .stTabs [data-baseweb="tab"]{background:#FFFDFE;border-radius:999px;border:1px solid #F3C9D2;color:#6B3F4A;}
+    .stTabs [aria-selected="true"]{background:#F8D7DE!important;color:#5A2F3A!important;}
+    .stButton>button,.stDownloadButton>button{background:#E7A9B7;color:white;border:none;border-radius:15px;font-weight:700;}
+    .stButton>button:hover,.stDownloadButton>button:hover{background:#D98FA0;color:white;}
+    div[data-testid="stDataFrame"]{background:#FFFDFE;border-radius:16px;}
+    .calendar-card{background:#FFFDFE;border:1px solid #F3C9D2;border-radius:16px;padding:10px;min-height:98px;margin:2px;}
+    .calendar-empty{background:#FFF0F3;border:1px dashed #F3C9D2;border-radius:16px;padding:10px;min-height:98px;margin:2px;color:#B78A94;}
+    .gain{color:#2F8F5B;font-weight:700;}
+    .loss{color:#C05A6A;font-weight:700;}
+    .flat{color:#777;font-weight:700;}
+    </style>
+    """
+st.markdown(css, unsafe_allow_html=True)
 
 def init_files():
     if not HOLDINGS_FILE.exists():
@@ -313,7 +327,8 @@ def export_backup(holdings, trades, daily):
     return json.dumps({
         "holdings": normalize_holdings(holdings).to_dict("records"),
         "trades": normalize_trades(trades).to_dict("records"),
-        "daily": normalize_daily(daily).to_dict("records")
+        "daily": normalize_daily(daily).to_dict("records"),
+        "settings": load_settings()
     }, ensure_ascii=False, indent=2)
 
 def import_backup(uploaded_file):
@@ -324,11 +339,88 @@ def import_backup(uploaded_file):
     save_csv(holdings, HOLDINGS_FILE, HOLDINGS_COLS)
     save_csv(trades, TRADES_FILE, TRADES_COLS)
     save_csv(daily, DAILY_FILE, DAILY_COLS)
+    if "settings" in data:
+        save_settings(data["settings"])
+
+def prepare_daily_view(daily):
+    d = normalize_daily(daily).copy()
+    if d.empty:
+        return d
+    d["date_dt"] = pd.to_datetime(d["date"], errors="coerce")
+    d = d.dropna(subset=["date_dt"]).sort_values("date_dt")
+    d["daily_change"] = d["total_market_value"].diff()
+    d["month"] = d["date_dt"].dt.to_period("M").astype(str)
+    d["year"] = d["date_dt"].dt.year
+    d["month_num"] = d["date_dt"].dt.month
+    return d
+
+def render_calendar(daily, year, month):
+    d = prepare_daily_view(daily)
+    data = {}
+    if not d.empty:
+        mdf = d[(d["date_dt"].dt.year == year) & (d["date_dt"].dt.month == month)]
+        for _, r in mdf.iterrows():
+            data[int(r["date_dt"].day)] = r
+
+    st.subheader(f"{year} 年 {month} 月資產月曆")
+    week_names = ["一", "二", "三", "四", "五", "六", "日"]
+    cols = st.columns(7)
+    for i, w in enumerate(week_names):
+        cols[i].markdown(f"**{w}**")
+
+    cal = calendar.Calendar(firstweekday=0).monthdayscalendar(year, month)
+    for week in cal:
+        cols = st.columns(7)
+        for i, day in enumerate(week):
+            if day == 0:
+                cols[i].markdown('<div class="calendar-empty"></div>', unsafe_allow_html=True)
+            elif day in data:
+                r = data[day]
+                chg = float(r.get("daily_change", 0) or 0)
+                cls = "gain" if chg > 0 else "loss" if chg < 0 else "flat"
+                sign = "+" if chg > 0 else ""
+                cols[i].markdown(f"""
+                    <div class="calendar-card">
+                        <b>{day}</b><br>
+                        <span>資產 {money(r["total_market_value"])}</span><br>
+                        <span class="{cls}">{sign}{money(chg)}</span><br>
+                        <small>總損益 {money(r["total_profit"])}</small>
+                    </div>
+                """, unsafe_allow_html=True)
+            else:
+                cols[i].markdown(f"""
+                    <div class="calendar-empty">
+                        <b>{day}</b><br><small>無紀錄</small>
+                    </div>
+                """, unsafe_allow_html=True)
+
+def monthly_summary(daily):
+    d = prepare_daily_view(daily)
+    if d.empty:
+        return pd.DataFrame()
+    rows = []
+    for m, g in d.groupby("month"):
+        g = g.sort_values("date_dt")
+        start = float(g["total_market_value"].iloc[0])
+        end = float(g["total_market_value"].iloc[-1])
+        change = end - start
+        ret = change / start * 100 if start else 0
+        rows.append({
+            "月份": m,
+            "月初資產": start,
+            "月底資產": end,
+            "月增減": change,
+            "月報酬率%": ret,
+            "月底未實現": float(g["unrealized_profit"].iloc[-1]),
+            "月底已實現": float(g["realized_profit"].iloc[-1]),
+            "月底總損益": float(g["total_profit"].iloc[-1]),
+            "紀錄天數": len(g)
+        })
+    return pd.DataFrame(rows).sort_values("月份", ascending=False)
 
 init_files()
 
 with st.sidebar:
-    st.header("設定")
     usd_rate = st.number_input("USD/TWD 匯率", value=float(usd_twd_rate()), step=0.01)
     discount = st.number_input("台股手續費折扣", value=0.28, step=0.01, help="2.8折填 0.28；6折填 0.6")
     min_fee = st.number_input("最低手續費", value=1, step=1)
@@ -337,8 +429,8 @@ holdings = normalize_holdings(read_csv(HOLDINGS_FILE, HOLDINGS_COLS))
 trades = normalize_trades(read_csv(TRADES_FILE, TRADES_COLS))
 daily = normalize_daily(read_csv(DAILY_FILE, DAILY_COLS))
 
-st.title("🌸 價差交易紀錄｜手動備份版")
-st.caption("淡粉色版｜不使用 Google Sheets、不使用 SQLite。每天可手動匯出備份，也可匯入備份覆蓋資料。")
+st.title("🐢 價差交易紀錄｜月曆版")
+st.caption("新增資產月曆、每日變化時間軸、每月統計，並可切換淡粉色 / 海龜沙灘版。")
 
 colu1, colu2 = st.columns(2)
 with colu1:
@@ -367,7 +459,6 @@ with colu2:
 
 dfv = calc_values(holdings, usd_rate)
 total_market = dfv["market_value"].sum()
-total_cost = dfv["cost_value"].sum()
 unrealized = dfv["unrealized_profit"].sum()
 realized = realized_total(trades)
 total_profit = unrealized + realized
@@ -378,7 +469,7 @@ c2.metric("未實現損益", money(unrealized) + " 元")
 c3.metric("已實現損益", money(realized) + " 元")
 c4.metric("總損益", money(total_profit) + " 元")
 
-tabs = st.tabs(["新增買賣", "庫存", "交易紀錄", "每日資產", "損益統計", "備份/還原"])
+tabs = st.tabs(["新增買賣", "庫存", "交易紀錄", "每日資產", "資產月曆", "每月統計", "損益統計", "備份/還原"])
 
 with tabs[0]:
     st.subheader("新增買賣交易")
@@ -387,31 +478,23 @@ with tabs[0]:
         d = a.date_input("日期", value=date.today())
         action = b.selectbox("動作", ["買進","賣出"])
         symbol = c.text_input("股票代碼", value="00631L").upper()
-
         d1,d2,d3 = st.columns(3)
         name = d1.text_input("名稱", value="")
         market = d2.selectbox("市場", ["TW","US"])
         currency = d3.selectbox("幣別", ["TWD","USD"])
-
         e1,e2,e3 = st.columns(3)
         qty = e1.number_input("股數", value=0.0, step=1.0)
         price = e2.number_input("成交價", value=0.0, step=0.01)
         auto_calc = e3.checkbox("自動計算台股手續費/稅", value=True)
-
         bf, sf, tx = auto_fee_tax(symbol, market, action, qty, price, discount, min_fee)
         f1,f2,f3 = st.columns(3)
         buy_fee = f1.number_input("買進手續費", value=float(bf if auto_calc else 0), step=1.0)
         sell_fee = f2.number_input("賣出手續費", value=float(sf if auto_calc else 0), step=1.0)
         tax = f3.number_input("證交稅/交易稅", value=float(tx if auto_calc else 0), step=1.0)
-
         note = st.text_area("備註")
         submitted = st.form_submit_button("新增交易並更新庫存")
-
         if submitted:
-            holdings, trades = add_trade(
-                holdings, trades, d.isoformat(), symbol, name, market, currency,
-                action, qty, price, buy_fee, sell_fee, tax, note
-            )
+            holdings, trades = add_trade(holdings, trades, d.isoformat(), symbol, name, market, currency, action, qty, price, buy_fee, sell_fee, tax, note)
             save_csv(holdings, HOLDINGS_FILE, HOLDINGS_COLS)
             save_csv(trades, TRADES_FILE, TRADES_COLS)
             save_daily_snapshot(holdings, trades, usd_rate)
@@ -422,7 +505,6 @@ with tabs[1]:
     st.subheader("目前庫存")
     show = dfv[["symbol","name","market","currency","shares","avg_cost","price","market_value","cost_value","unrealized_profit","return_rate"]]
     st.dataframe(show, use_container_width=True, hide_index=True)
-
     st.subheader("手動修改庫存")
     edited = st.data_editor(holdings, use_container_width=True, num_rows="dynamic", hide_index=True)
     if st.button("💾 儲存庫存修改"):
@@ -433,18 +515,14 @@ with tabs[1]:
 with tabs[2]:
     st.subheader("交易紀錄：可修改 / 刪除")
     st.warning("修改或刪除交易會更新交易紀錄與已實現損益；若該筆已影響庫存，請到庫存頁確認是否也要手動調整。")
-
     trades_manage = trades.copy()
     trades_manage.insert(0, "delete", False)
-
     for col in ["date", "symbol", "name", "market", "currency", "action", "note"]:
         trades_manage[col] = trades_manage[col].astype(str)
     for col in ["qty", "price", "buy_fee", "sell_fee", "tax", "gross_realized", "net_realized"]:
         trades_manage[col] = pd.to_numeric(trades_manage[col], errors="coerce").fillna(0.0)
     trades_manage["delete"] = trades_manage["delete"].fillna(False).astype(bool)
-
     edited_trades = st.data_editor(trades_manage, use_container_width=True, hide_index=True, num_rows="dynamic")
-
     if st.button("💾 儲存交易修改 / 刪除", use_container_width=True):
         new_trades = edited_trades.copy()
         if "delete" in new_trades.columns:
@@ -459,15 +537,34 @@ with tabs[3]:
     st.subheader("每日資產紀錄")
     daily = normalize_daily(read_csv(DAILY_FILE, DAILY_COLS))
     if not daily.empty:
-        daily_show = daily.sort_values("date", ascending=False).copy()
-        daily_show["較前次變化"] = daily_show["total_market_value"].diff(-1)
-        st.dataframe(daily_show, use_container_width=True, hide_index=True)
-        chart = daily.sort_values("date").set_index("date")
+        dview = prepare_daily_view(daily)
+        daily_show = dview.sort_values("date_dt", ascending=False).copy()
+        daily_show["較前次變化"] = daily_show["daily_change"]
+        st.dataframe(daily_show.drop(columns=["date_dt","month","year","month_num"], errors="ignore"), use_container_width=True, hide_index=True)
+        chart = dview.sort_values("date_dt").set_index("date")
         st.line_chart(chart[["total_market_value","unrealized_profit","realized_profit","total_profit"]])
     else:
         st.info("尚未有每日資產紀錄")
 
 with tabs[4]:
+    dview = prepare_daily_view(daily)
+    today = date.today()
+    years = [today.year] if dview.empty else sorted(dview["year"].dropna().astype(int).unique().tolist(), reverse=True)
+    col_y, col_m = st.columns(2)
+    y = col_y.selectbox("年份", years, index=0)
+    m = col_m.selectbox("月份", list(range(1,13)), index=today.month-1)
+    render_calendar(daily, int(y), int(m))
+
+with tabs[5]:
+    st.subheader("每月統計")
+    ms = monthly_summary(daily)
+    if ms.empty:
+        st.info("尚未有每日資產紀錄")
+    else:
+        st.dataframe(ms, use_container_width=True, hide_index=True)
+        st.bar_chart(ms.sort_values("月份").set_index("月份")["月增減"])
+
+with tabs[6]:
     st.subheader("損益統計")
     if not trades.empty:
         t = normalize_trades(trades)
@@ -482,19 +579,11 @@ with tabs[4]:
     else:
         st.info("尚未有交易紀錄")
 
-with tabs[5]:
+with tabs[7]:
     st.subheader("備份 / 還原")
     st.info("建議每天操作完後，下載一次完整 JSON 備份。若資料遺失，可用匯入備份覆蓋回來。")
-
     backup_data = export_backup(holdings, trades, daily)
-    st.download_button(
-        "⬇️ 匯出完整備份 JSON",
-        data=backup_data,
-        file_name=f"價差交易紀錄備份_{date.today().isoformat()}.json",
-        mime="application/json",
-        use_container_width=True
-    )
-
+    st.download_button("⬇️ 匯出完整備份 JSON", data=backup_data, file_name=f"價差交易紀錄備份_{date.today().isoformat()}.json", mime="application/json", use_container_width=True)
     uploaded = st.file_uploader("匯入備份 JSON 並覆蓋目前資料", type=["json"])
     if uploaded is not None:
         st.warning("按下方按鈕後，會用備份檔覆蓋目前庫存、交易紀錄、每日資產。")
@@ -502,7 +591,6 @@ with tabs[5]:
             import_backup(uploaded)
             st.success("已匯入備份並覆蓋資料，請重新整理頁面。")
             st.rerun()
-
     st.divider()
     st.subheader("單獨下載 CSV")
     st.download_button("⬇️ 下載庫存 CSV", normalize_holdings(holdings).to_csv(index=False).encode("utf-8-sig"), "holdings.csv", "text/csv")
