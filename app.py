@@ -83,6 +83,63 @@ if theme == "海龜森林版":
     .gain{color:#287C4F;font-weight:700;}
     .loss{color:#B85C5C;font-weight:700;}
     .flat{color:#777;font-weight:700;}
+    
+    div[data-testid="stTextInput"] input,
+    div[data-testid="stNumberInput"] input,
+    div[data-testid="stDateInput"] input,
+    div[data-baseweb="select"] > div,
+    textarea {
+        background:#FFFFFF !important;
+        color:#173B35 !important;
+        border:2px solid #4F8A8B !important;
+        border-radius:14px !important;
+        font-weight:700 !important;
+        box-shadow:0 2px 8px rgba(0,0,0,.06) !important;
+    }
+    div[data-testid="stTextInput"] input:focus,
+    div[data-testid="stNumberInput"] input:focus,
+    div[data-testid="stDateInput"] input:focus,
+    textarea:focus {
+        border:3px solid #2F5D62 !important;
+        box-shadow:0 0 0 3px rgba(79,138,139,.18) !important;
+    }
+    div[data-testid="stTextInput"] label,
+    div[data-testid="stNumberInput"] label,
+    div[data-testid="stDateInput"] label,
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stTextArea"] label {
+        font-size:1rem !important;
+        font-weight:800 !important;
+        color:#2F5D62 !important;
+    }
+    .trade-card{
+        background:rgba(255,255,255,.72);
+        border:2px solid rgba(79,138,139,.35);
+        border-radius:22px;
+        padding:18px;
+        margin-bottom:14px;
+        box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+    .fee-preview{
+        background:#FFFFFF;
+        border:2px dashed #4F8A8B;
+        border-radius:18px;
+        padding:14px;
+        margin-top:10px;
+        font-weight:800;
+        color:#2F5D62;
+    }
+    .quick-chip{
+        display:inline-block;
+        background:#FFFFFF;
+        border:1px solid #4F8A8B;
+        border-radius:999px;
+        padding:6px 10px;
+        margin:2px;
+        color:#2F5D62;
+        font-weight:800;
+    }
+
     </style>
     """
 elif theme == "海龜海洋版":
@@ -104,6 +161,63 @@ elif theme == "海龜海洋版":
     .gain{color:#2F8F70;font-weight:700;}
     .loss{color:#B85C5C;font-weight:700;}
     .flat{color:#777;font-weight:700;}
+    
+    div[data-testid="stTextInput"] input,
+    div[data-testid="stNumberInput"] input,
+    div[data-testid="stDateInput"] input,
+    div[data-baseweb="select"] > div,
+    textarea {
+        background:#FFFFFF !important;
+        color:#173B35 !important;
+        border:2px solid #4F8A8B !important;
+        border-radius:14px !important;
+        font-weight:700 !important;
+        box-shadow:0 2px 8px rgba(0,0,0,.06) !important;
+    }
+    div[data-testid="stTextInput"] input:focus,
+    div[data-testid="stNumberInput"] input:focus,
+    div[data-testid="stDateInput"] input:focus,
+    textarea:focus {
+        border:3px solid #2F5D62 !important;
+        box-shadow:0 0 0 3px rgba(79,138,139,.18) !important;
+    }
+    div[data-testid="stTextInput"] label,
+    div[data-testid="stNumberInput"] label,
+    div[data-testid="stDateInput"] label,
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stTextArea"] label {
+        font-size:1rem !important;
+        font-weight:800 !important;
+        color:#2F5D62 !important;
+    }
+    .trade-card{
+        background:rgba(255,255,255,.72);
+        border:2px solid rgba(79,138,139,.35);
+        border-radius:22px;
+        padding:18px;
+        margin-bottom:14px;
+        box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+    .fee-preview{
+        background:#FFFFFF;
+        border:2px dashed #4F8A8B;
+        border-radius:18px;
+        padding:14px;
+        margin-top:10px;
+        font-weight:800;
+        color:#2F5D62;
+    }
+    .quick-chip{
+        display:inline-block;
+        background:#FFFFFF;
+        border:1px solid #4F8A8B;
+        border-radius:999px;
+        padding:6px 10px;
+        margin:2px;
+        color:#2F5D62;
+        font-weight:800;
+    }
+
     </style>
     """
 elif theme == "海龜沙灘版":
@@ -125,6 +239,63 @@ elif theme == "海龜沙灘版":
     .gain{color:#2F7D4F;font-weight:700;}
     .loss{color:#B85C5C;font-weight:700;}
     .flat{color:#777;font-weight:700;}
+    
+    div[data-testid="stTextInput"] input,
+    div[data-testid="stNumberInput"] input,
+    div[data-testid="stDateInput"] input,
+    div[data-baseweb="select"] > div,
+    textarea {
+        background:#FFFFFF !important;
+        color:#173B35 !important;
+        border:2px solid #4F8A8B !important;
+        border-radius:14px !important;
+        font-weight:700 !important;
+        box-shadow:0 2px 8px rgba(0,0,0,.06) !important;
+    }
+    div[data-testid="stTextInput"] input:focus,
+    div[data-testid="stNumberInput"] input:focus,
+    div[data-testid="stDateInput"] input:focus,
+    textarea:focus {
+        border:3px solid #2F5D62 !important;
+        box-shadow:0 0 0 3px rgba(79,138,139,.18) !important;
+    }
+    div[data-testid="stTextInput"] label,
+    div[data-testid="stNumberInput"] label,
+    div[data-testid="stDateInput"] label,
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stTextArea"] label {
+        font-size:1rem !important;
+        font-weight:800 !important;
+        color:#2F5D62 !important;
+    }
+    .trade-card{
+        background:rgba(255,255,255,.72);
+        border:2px solid rgba(79,138,139,.35);
+        border-radius:22px;
+        padding:18px;
+        margin-bottom:14px;
+        box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+    .fee-preview{
+        background:#FFFFFF;
+        border:2px dashed #4F8A8B;
+        border-radius:18px;
+        padding:14px;
+        margin-top:10px;
+        font-weight:800;
+        color:#2F5D62;
+    }
+    .quick-chip{
+        display:inline-block;
+        background:#FFFFFF;
+        border:1px solid #4F8A8B;
+        border-radius:999px;
+        padding:6px 10px;
+        margin:2px;
+        color:#2F5D62;
+        font-weight:800;
+    }
+
     </style>
     """
 else:
@@ -146,6 +317,63 @@ else:
     .gain{color:#2F8F5B;font-weight:700;}
     .loss{color:#C05A6A;font-weight:700;}
     .flat{color:#777;font-weight:700;}
+    
+    div[data-testid="stTextInput"] input,
+    div[data-testid="stNumberInput"] input,
+    div[data-testid="stDateInput"] input,
+    div[data-baseweb="select"] > div,
+    textarea {
+        background:#FFFFFF !important;
+        color:#173B35 !important;
+        border:2px solid #4F8A8B !important;
+        border-radius:14px !important;
+        font-weight:700 !important;
+        box-shadow:0 2px 8px rgba(0,0,0,.06) !important;
+    }
+    div[data-testid="stTextInput"] input:focus,
+    div[data-testid="stNumberInput"] input:focus,
+    div[data-testid="stDateInput"] input:focus,
+    textarea:focus {
+        border:3px solid #2F5D62 !important;
+        box-shadow:0 0 0 3px rgba(79,138,139,.18) !important;
+    }
+    div[data-testid="stTextInput"] label,
+    div[data-testid="stNumberInput"] label,
+    div[data-testid="stDateInput"] label,
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stTextArea"] label {
+        font-size:1rem !important;
+        font-weight:800 !important;
+        color:#2F5D62 !important;
+    }
+    .trade-card{
+        background:rgba(255,255,255,.72);
+        border:2px solid rgba(79,138,139,.35);
+        border-radius:22px;
+        padding:18px;
+        margin-bottom:14px;
+        box-shadow:0 6px 18px rgba(0,0,0,.06);
+    }
+    .fee-preview{
+        background:#FFFFFF;
+        border:2px dashed #4F8A8B;
+        border-radius:18px;
+        padding:14px;
+        margin-top:10px;
+        font-weight:800;
+        color:#2F5D62;
+    }
+    .quick-chip{
+        display:inline-block;
+        background:#FFFFFF;
+        border:1px solid #4F8A8B;
+        border-radius:999px;
+        padding:6px 10px;
+        margin:2px;
+        color:#2F5D62;
+        font-weight:800;
+    }
+
     </style>
     """
 st.markdown(css, unsafe_allow_html=True)
@@ -514,7 +742,7 @@ trades = normalize_trades(read_csv(TRADES_FILE, TRADES_COLS))
 daily = normalize_daily(read_csv(DAILY_FILE, DAILY_COLS))
 
 st.title("🐢 價差交易紀錄｜月曆版")
-st.caption("新增價差月曆、每日變化時間軸、每月統計，並可切換淡粉色 / 海龜沙灘版 / 海洋版 / 森林版。")
+st.caption("v3 輸入區強化版｜新增買賣欄位更清楚，保留價差月曆、中文表頭、四種主題。")
 
 colu1, colu2 = st.columns(2)
 with colu1:
@@ -557,26 +785,52 @@ tabs = st.tabs(["新增買賣", "庫存", "交易紀錄", "每日資產", "價�
 
 with tabs[0]:
     st.subheader("新增買賣交易")
+    st.markdown('<div class="trade-card">', unsafe_allow_html=True)
+    st.markdown("#### ⭐ 常用股票")
+    qcols = st.columns(6)
+    common = [("00631L","元大台灣50正2","TW","TWD"),("2330","台積電","TW","TWD"),("00947","台新IC設計ETF","TW","TWD"),("QQQ","Invesco QQQ","US","USD"),("SMH","VanEck Semiconductor ETF","US","USD"),("NVDA","NVIDIA","US","USD")]
+    if "quick_symbol" not in st.session_state:
+        st.session_state.quick_symbol = "00631L"
+        st.session_state.quick_name = ""
+        st.session_state.quick_market = "TW"
+        st.session_state.quick_currency = "TWD"
+    for idx, (sym0, name0, market0, curr0) in enumerate(common):
+        if qcols[idx].button(sym0, use_container_width=True):
+            st.session_state.quick_symbol = sym0
+            st.session_state.quick_name = name0
+            st.session_state.quick_market = market0
+            st.session_state.quick_currency = curr0
+            st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown('<div class="trade-card">', unsafe_allow_html=True)
     with st.form("trade_form"):
+        st.markdown("#### 📝 輸入交易資料")
         a,b,c = st.columns(3)
-        d = a.date_input("日期", value=date.today())
-        action = b.selectbox("動作", ["買進","賣出"])
-        symbol = c.text_input("股票代碼", value="00631L").upper()
+        d = a.date_input("📅 交易日期", value=date.today())
+        action = b.selectbox("🟢 買進 / 🔴 賣出", ["買進","賣出"])
+        symbol = c.text_input("股票代碼，例如 00631L / 2330 / QQQ / SMH", value=st.session_state.get("quick_symbol","00631L")).upper()
+
         d1,d2,d3 = st.columns(3)
-        name = d1.text_input("名稱", value="")
-        market = d2.selectbox("市場", ["TW","US"])
-        currency = d3.selectbox("幣別", ["TWD","USD"])
+        name = d1.text_input("股票名稱，可空白", value=st.session_state.get("quick_name",""))
+        market = d2.selectbox("市場", ["TW","US"], index=0 if st.session_state.get("quick_market","TW")=="TW" else 1)
+        currency = d3.selectbox("幣別", ["TWD","USD"], index=0 if st.session_state.get("quick_currency","TWD")=="TWD" else 1)
+
         e1,e2,e3 = st.columns(3)
-        qty = e1.number_input("股數", value=0.0, step=1.0)
-        price = e2.number_input("成交價", value=0.0, step=0.01)
-        auto_calc = e3.checkbox("自動計算台股手續費/稅", value=True)
+        qty = e1.number_input("請輸入股數", value=0.0, step=1.0)
+        price = e2.number_input("請輸入成交價", value=0.0, step=0.01)
+        auto_calc = e3.checkbox("✅ 自動計算手續費及證交稅", value=True)
+
         bf, sf, tx = auto_fee_tax(symbol, market, action, qty, price, discount, min_fee)
+        st.markdown(f'<div class="fee-preview">手續費預覽：買進手續費 {money(bf)} ｜ 賣出手續費 {money(sf)} ｜ 證交稅/交易稅 {money(tx)}</div>', unsafe_allow_html=True)
+
         f1,f2,f3 = st.columns(3)
         buy_fee = f1.number_input("買進手續費", value=float(bf if auto_calc else 0), step=1.0)
         sell_fee = f2.number_input("賣出手續費", value=float(sf if auto_calc else 0), step=1.0)
         tax = f3.number_input("證交稅/交易稅", value=float(tx if auto_calc else 0), step=1.0)
-        note = st.text_area("備註")
-        submitted = st.form_submit_button("新增交易並更新庫存")
+
+        note = st.text_area("備註，例如：突破賣出、回補、短線價差")
+        submitted = st.form_submit_button("✅ 立即新增交易並更新庫存", use_container_width=True)
         if submitted:
             holdings, trades = add_trade(holdings, trades, d.isoformat(), symbol, name, market, currency, action, qty, price, buy_fee, sell_fee, tax, note)
             save_csv(holdings, HOLDINGS_FILE, HOLDINGS_COLS)
@@ -584,6 +838,7 @@ with tabs[0]:
             save_daily_snapshot(holdings, trades, usd_rate)
             st.success("已新增交易，並自動更新庫存與損益")
             st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 with tabs[1]:
     st.subheader("目前庫存")
